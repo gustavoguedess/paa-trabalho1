@@ -3,8 +3,11 @@ all:
 	g++ closest.cpp -o closest -lm
 
 run:
-	./genpoints 10
+	./genpoints 10000
 	./closest input.txt
 	
 clean:
 	rm -f genpoints;
+	rm -f closest;
+	rm -f input.txt;
+
