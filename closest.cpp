@@ -11,6 +11,7 @@
 
 #include<stdio.h>
 #include<vector>
+#include<math.h>
 
 #define MAX 112345
 
@@ -19,7 +20,26 @@ using namespace std;
 struct Point{
     double x,y;
     Point(double x, double y):x(x),y(y){}
+    void to_string(){printf("%lf %lf", x, y);}
 };
+struct Par{
+    Point a, b;
+    double dist;
+    Par(Point a, Point b):a(a),b(b){
+        dist = sqrt((a.x-b.x)*(a.x-b.x)+(a.y-b.y)*(a.y-b.y)); //Distância Euclidiana
+    }
+    void to_string(){
+        printf("%lf ", dist);
+        a.to_string();
+        printf(" ");
+        b.to_string();
+    }
+};
+
+Par menor_par(Par a, Par b){
+    if(a.dist<b.dist) return a;
+    return b;
+}
 
 int n_points;
 
@@ -43,6 +63,12 @@ vector<Point> read_points(char *file_name){
     return vector_points;
 }
 
+
+double par_mais_proximo(){
+    return 1;
+}
+
+
 int main(int argc, char *argv[]){
     if (argc != 2) {
 		fprintf(stderr, "Uso: %s input.txt\n", argv[0]);
@@ -51,7 +77,7 @@ int main(int argc, char *argv[]){
     
 
     vector<Point> points = read_points(argv[1]);
-    if(points.size()==0){
+    if(points.size()<2){
         return 1;
     }
 
@@ -60,6 +86,13 @@ int main(int argc, char *argv[]){
         printf("Ponto: (%lf,%lf)\n", p.x, p.y);
     }
     
+    Par menor = Par(points[0],points[1]);
+    for(int i=0; i<n_points; i++)
+        for(int j=i+1; j<n_points; j++)
+            menor = menor_par(menor, Par(points[i],points[j]));
+    
+    menor.to_string();
+    printf("\n");
 
     return 0;
 }
