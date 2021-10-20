@@ -12,8 +12,8 @@
 #include<stdio.h>
 #include<vector>
 #include<math.h>
-#include<algorithm>
-#include <chrono>
+#include<iostream>
+#include <string>
 
 #define MAX 112345
 #define INF 1123456
@@ -24,7 +24,10 @@ struct Point{
     double x,y;
     Point(double x, double y):x(x),y(y){}
     Point():x(0),y(0){}
-    void to_string(bool end_line=false){printf("%lf %lf%s", x, y,end_line?"\n":"");}
+    string to_string(bool end_line=false){
+        string saida = std::to_string(x) +" "+ std::to_string(y) ;
+        return saida;
+    }
     bool operator<(Point a) const{
         if(x<a.x)return true;
         return false;
@@ -33,15 +36,12 @@ struct Point{
 };
 struct Par{
     Point a, b;
-    double dist;
+    double              dist;
     Par(Point a, Point b):a(a),b(b) {dist = sqrt((a.x-b.x)*(a.x-b.x)+(a.y-b.y)*(a.y-b.y));}
     Par():a(Point(-INF, -INF)),b(Point(INF,INF)) {dist = sqrt((a.x-b.x)*(a.x-b.x)+(a.y-b.y)*(a.y-b.y));}
-    void to_string(){
-        printf("%lf ", dist);
-        a.to_string();
-        printf(" ");
-        b.to_string();
-        printf("\n");
+    string to_string(){
+        string saida = std::to_string(dist)+" "+a.to_string()+" "+b.to_string();
+        return saida;
     }
 };
 
@@ -208,8 +208,7 @@ int main(int argc, char *argv[]){
     points = sortX(points, n_points);
     Par r = parMaisProximo(points, n_points);  //Solução O(n log n)
     
-    
-    r.to_string();
+    cout << r.to_string() << endl;
 
     return 0;
 }
