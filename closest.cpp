@@ -59,11 +59,36 @@ Point* copy(Point* points, int ini, int fim){
 int n_points;
 
 //-------------- SORT -----------------------
+void merge(Point* points, int ini, int fin, bool (*cmp)(Point,Point)){
+    int mid = (ini+fin)/2;
+    int n = fin-ini;
+    Point aux[n];
+
+    int t=0, j=mid;
+    for (int i=ini; i<mid;)
+        if( cmp(points[i], points[j]) || j==fin )
+            aux[t++]=points[i++];
+        else 
+            aux[t++]=points[j++];
+    while( j<fin )
+        aux[t++]=points[j++];
+    
+    for(int i=0; i<t; i++)
+        points[i+ini]=aux[i];
+}
+void mergesort(Point* points, int ini, int fin, bool (*cmp)(Point,Point)){
+    if ( ini+1>=fin ) return;
+    int mid = (ini+fin)/2;
+    mergesort(points, ini, mid, cmp);
+    mergesort(points, mid, fin, cmp);
+    merge(points, ini, fin, cmp);
+}
+
 bool compareX(Point p1, Point p2){
     return p1.x<p2.x;
 }
 Point* sortX(Point* points, int n){
-    sort(points, points+n, compareX);
+    mergesort(points, 0, n, compareX);
     return points;
 }
 
@@ -71,13 +96,13 @@ bool compareY(Point p1, Point p2){
     return p1.y<p2.y;
 }
 Point* sortY(Point* points, int n){
-    sort(points, points+n, compareY);
+    mergesort(points, 0, n, compareY);
     return points;
 }
 //------------------------------------------
 
 // ==================== Solução Quadrática =====================
-Par minDistBruto(Point* points, int ini, int fin){
+Par maisProximoBruto(Point* points, int ini, int fin){
     Par menor = Par(points[ini],points[ini+1]);   
 
     for(int i=ini; i<fin; i++)
@@ -89,24 +114,16 @@ Par minDistBruto(Point* points, int ini, int fin){
 
 
 //-=-=-=-=-=-=-=-=-=-=-=    SOLUÇÃO OTIMIZADA   =-=-=-=-=-=-=-=-=-=-=-=-=-=
-Par par_mais_proximo_entre_lados(vector<Point> points, int ini, int fin) {
-    int mid = (fin+ini)/2;
-    Par menor = Par(points[ini], points[ini+1]);
 
-    for(int i=ini; i<mid; i++)
-        for(int j=mid; j<fin; j++)
-            menor = menor_par(menor, Par(points[i], points[j]));
-    return menor;
-}
-Par minDistFrente(Point* Y, int n, Par d){    
+Par maisProximoDelta(Point* Y, int n, Par d){    
     for(int i=0; i<n-1; i++)
         for(int j=i+1; (j<n) && (Y[j].y-Y[i].y<d.dist); j++)
             d = menor_par(d, Par(Y[i], Y[j])); 
 
     return d;
 }
-Par minDist(Point* X, Point* Y, int ini, int fin){
-    if (fin-ini<=3) return minDistBruto(X, ini, fin);
+Par maisProximo(Point* X, Point* Y, int ini, int fin){
+    if (fin-ini<=3) return maisProximoBruto(X, ini, fin);
     int mid = (fin+ini)/2;
     int n = fin-ini;
 
@@ -122,8 +139,8 @@ Par minDist(Point* X, Point* Y, int ini, int fin){
         else
             Yr[r++]=Y[i];
 
-    Par dl = minDist(X, Yl, ini, mid);
-    Par dr = minDist(X, Yr, mid, fin);
+    Par dl = maisProximo(X, Yl, ini, mid);
+    Par dr = maisProximo(X, Yr, mid, fin);
     Par d = menor_par(dl, dr);
     
     Point Pd[n];
@@ -135,7 +152,7 @@ Par minDist(Point* X, Point* Y, int ini, int fin){
         if ( abs(Y[i].x-midx) < d.dist )
             Pd[id++]=Y[i];
     }
-    Par df = minDistFrente(Pd, id, d);
+    Par df = maisProximoDelta(Pd, id, d);
     
     return menor_par(d, df);
 }
@@ -143,14 +160,9 @@ Par minDist(Point* X, Point* Y, int ini, int fin){
 Par parMaisProximo(Point* points, int n){
     Point* X = sortX(copy(points, 0, n), n);
     Point* Y = sortY(copy(points, 0, n), n);
-    
-    Par min_par = minDist(X, Y, 0, n);
-    
-    /*
-    for(int i=0;i<n_points;i++){
-        X[i].to_string(true);
-    }
-    */
+
+    Par min_par = maisProximo(X, Y, 0, n);
+
     return min_par;
 }
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
