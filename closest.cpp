@@ -141,9 +141,9 @@ Par maisProximo(Point* X, Point* Y, int ini, int fin){
     
     int l=0, r=0;
     for (int i=0; i<n; i++)
-        if (Y[i].x<=X[mid].x && l<mid-ini+1)
+        if (Y[i].x<=X[mid].x)
             Yl[l++]=Y[i];
-        else if(r<fin-mid)
+        else
             Yr[r++]=Y[i];
             
     Par dl = maisProximo(X, Yl, ini, mid);
