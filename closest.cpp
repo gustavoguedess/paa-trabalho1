@@ -3,7 +3,7 @@
  *      Trabalho 1 de Projeto e Análise de Algoritmo          *
  *      Escrito por:                                          *
  *          Gustavo Inacio Pereira Guedes - 2088860           *
- *          Franziska Romani Furtado - 2024551                *
+ *          Franziska Romani Furtado - 1248006                *
  *          Rafael Rosa da Silva - 2024551                    *
  *                                                            *
  * ************************************************************
