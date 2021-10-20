@@ -129,25 +129,20 @@ Par maisProximo(Point* X, Point* Y, int ini, int fin){
 
     Point Yl[mid-ini+1];
     Point Yr[fin-mid];
-
-    int l=0;
-    int r=0;
-
+    int l=0, r=0;
     for (int i=0; i<n; i++)
         if (Y[i].x<=X[mid].x)
             Yl[l++]=Y[i];
         else
             Yr[r++]=Y[i];
-
     Par dl = maisProximo(X, Yl, ini, mid);
     Par dr = maisProximo(X, Yr, mid, fin);
     Par d = menor_par(dl, dr);
     
+
     Point Pd[n];
     int id=0;
     int midx = X[mid].x;
-
-    
     for(int i=0; i<n; i++){
         if ( abs(Y[i].x-midx) < d.dist )
             Pd[id++]=Y[i];
@@ -161,12 +156,10 @@ Par parMaisProximo(Point* points, int n){
     Point* X = sortX(copy(points, 0, n), n);
     Point* Y = sortY(copy(points, 0, n), n);
 
-    Par min_par = maisProximo(X, Y, 0, n);
-
-    return min_par;
+    return maisProximo(X, Y, 0, n);
 }
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-
+W
 // ---------------- LEITURA DO ARQUIVO --------------------
 Point* read_points(char *file_name){
     Point* vector_points;
