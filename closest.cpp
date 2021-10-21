@@ -97,7 +97,6 @@ bool compareX(Point p1, Point p2){
     else return false;
 }
 Point* sortX(Point* points, int n){
-    //mergesort(points, 0, n, compareX);
     sort(points, points+n, compareX);
     return points;
 }
@@ -108,7 +107,6 @@ bool compareY(Point p1, Point p2){
     else return false;
 }
 Point* sortY(Point* points, int n){
-    //mergesort(points, 0, n, compareY);
     sort(points, points+n, compareY);
     return points;
 }
@@ -189,12 +187,8 @@ Par parMaisProximo(Point* points, int n){
     Point* X = sortX(copy(points, n), n);
     Point* Y = sortY(copy(points, n), n);
     
-    /*
-    for(int i=0; i<n; i++)
-        cout << X[i].to_string() << endl;
-    //*/
     Par par = maisProximo(X, Y, 0, n);
-    //Par par = Par(Point(), Point());
+    
     free(X);
     free(Y);
     return par;
