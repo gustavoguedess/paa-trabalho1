@@ -92,7 +92,9 @@ void mergesort(Point* points, int ini, int fin, bool (*cmp)(Point,Point)){
 }
 
 bool compareX(Point p1, Point p2){
-    return p1.x<p2.x;
+    if (p1.x<p2.x) return true;
+    else if(p1.x<=p2.x+0.0000001 && p1.y<=p2.y) return true;
+    else return false;
 }
 Point* sortX(Point* points, int n){
     //mergesort(points, 0, n, compareX);
@@ -101,7 +103,9 @@ Point* sortX(Point* points, int n){
 }
 
 bool compareY(Point p1, Point p2){
-    return p1.y<p2.y;
+    if (p1.y<p2.y) return true;
+    else if(p1.y<=p2.y+0.0000001 && p1.x<=p2.x) return true;
+    else return false;
 }
 Point* sortY(Point* points, int n){
     //mergesort(points, 0, n, compareY);
@@ -136,16 +140,18 @@ Par maisProximo(Point* X, Point* Y, int ini, int fin){
     int mid = (fin+ini)/2;
     int n = fin-ini;
     
-    Point* Yl = (Point*)malloc((mid-ini+1)*sizeof(Point)); 
-    Point* Yr = (Point*)malloc((fin-mid)*sizeof(Point)); 
+    Point* Yl = (Point*)malloc((mid-ini+2)*sizeof(Point)); 
+    Point* Yr = (Point*)malloc((fin-mid+2)*sizeof(Point)); 
     
     int l=0, r=0;
     for (int i=0; i<n; i++)
-        if (Y[i].x<=X[mid].x)
+        if (Y[i].x<X[mid].x-0.0000001)
+            Yl[l++]=Y[i];
+        else if (Y[i].x<=X[mid].x+0.0000001 && Y[i].y<X[mid].y-0.0000001)
             Yl[l++]=Y[i];
         else
             Yr[r++]=Y[i];
-            
+    
     Par dl = maisProximo(X, Yl, ini, mid);
     Par dr = maisProximo(X, Yr, mid, fin);
     Par d = menor_par(dl, dr);
@@ -183,7 +189,12 @@ Par parMaisProximo(Point* points, int n){
     Point* X = sortX(copy(points, n), n);
     Point* Y = sortY(copy(points, n), n);
     
+    /*
+    for(int i=0; i<n; i++)
+        cout << X[i].to_string() << endl;
+    //*/
     Par par = maisProximo(X, Y, 0, n);
+    //Par par = Par(Point(), Point());
     free(X);
     free(Y);
     return par;
